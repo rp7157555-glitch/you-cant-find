@@ -1,0 +1,95 @@
+
+#include<stdio.h> 
+//Selection sort 
+void selection_sort(float arr[],int m) 
+{ 
+int i,j,min; 
+float temp; 
+for(i=0;i<m-1;i++) 
+{ 
+} 
+min = i; 
+for(j=i+1;j<m;j++) 
+{ 
+} 
+if(arr[j]<arr[min]) 
+{ 
+} 
+min = j; 
+temp = arr[i]; 
+arr[i] = arr[min]; 
+arr[min] = temp; 
+printf("\n The Sorted Array :"); 
+for(i=0;i<m;i++) 
+{ 
+printf("\n %.2f",arr[i]); 
+} 
+} 
+//Bubble sort 
+void bubble_sort(float arr[],int m) 
+{ 
+} 
+int i,j; 
+float temp; 
+for(i=0;i<m-1;i++) 
+{ 
+} 
+for(j=0;j<m-1-i;j++) 
+{ 
+} 
+if(arr[j]>arr[j+1]) 
+{ 
+} 
+temp = arr[j]; 
+arr[j] = arr[j+1]; 
+arr[j+1] = temp; 
+printf("\n The Sorted Array :"); 
+for(i=0;i<m;i++) 
+{ 
+} 
+printf("\n %.2f",arr[i]); 
+int main() 
+{ 
+int m,i,choice; 
+do 
+{ 
+printf("\n Enter the number of students:"); 
+scanf("%d",&m); 
+float arr[m]; 
+printf("\n Enter the percentage of the %d students :",m); 
+for(i=0;i<m;i++) 
+{ 
+} 
+scanf("%f",&arr[i]); 
+printf("\n 1.Selection Sort." 
+"\n 2.Bubble Sort." 
+"\n 3.Exit."); 
+printf("\n Enter your choice(1 or 2):"); 
+scanf("%d",&choice); 
+switch(choice) 
+{ 
+case 1: 
+selection_sort(arr,m); 
+break; 
+case 2: 
+bubble_sort(arr,m); 
+break; 
+case 3: 
+printf("\n Exit!"); 
+break; 
+default: 
+printf("\n Wrong Input."); 
+break; 
+} 
+if(choice<3) 
+{ 
+printf("\n Top Five Scores :"); 
+for(i=m-1;i>=m-5;i--) 
+{ 
+} 
+} 
+printf("\n %.2f",arr[i]); 
+printf("\n Thank You."); 
+}while(choice<3); 
+return 0; 
+} 
