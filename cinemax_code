@@ -1,0 +1,122 @@
+#include <stdio.h> 
+#include <stdlib.h> 
+#include <time.h> 
+struct Seat { 
+int seatNumber; 
+int status; 
+struct Seat* next; 
+struct Seat* prev; 
+}; 
+struct Seat* createSeat(int num, int status) { 
+struct Seat* newSeat = (struct Seat*)malloc(sizeof(struct Seat)); 
+newSeat->seatNumber = num; 
+newSeat->status = status; 
+newSeat->next = NULL; 
+newSeat->prev = NULL; 
+return newSeat; 
+} 
+struct Seat* initializeSeats() { 
+struct Seat *head = NULL, *temp = NULL; 
+srand(time(0)); 
+for (int i = 1; i <= 10; i++) { 
+int randomStatus = rand() % 2; 
+struct Seat* newSeat = createSeat(i, randomStatus); 
+if (head == NULL) 
+head = newSeat; 
+else { 
+temp->next = newSeat; 
+newSeat->prev = temp; 
+} 
+temp = newSeat; 
+} 
+return head; 
+} 
+void displayAvailableSeats(struct Seat* head) { 
+printf("\nAvailable Seats: "); 
+struct Seat* temp = head; 
+int found = 0; 
+while (temp != NULL) { 
+if (temp->status == 0) { 
+printf("%d ", temp->seatNumber); 
+found = 1; 
+} 
+temp = temp->next; 
+} 
+if (!found) 
+printf("No seats available."); 
+printf("\n"); 
+} 
+void bookSeat(struct Seat* head, int num) { 
+struct Seat* temp = head; 
+while (temp != NULL) { 
+if (temp->seatNumber == num) { 
+if (temp->status == 1) 
+printf("Seat %d is already booked.\n", num); 
+else { 
+temp->status = 1; 
+printf("Seat %d booked successfully.\n", num); 
+} 
+return; 
+} 
+temp = temp->next; 
+} 
+printf("Invalid seat number.\n"); 
+} 
+void cancelSeat(struct Seat* head, int num) { 
+struct Seat* temp = head; 
+while (temp != NULL) { 
+if (temp->seatNumber == num) { 
+if (temp->status == 0) 
+printf("Seat %d is not booked yet.\n", num); 
+else { 
+temp->status = 0; 
+printf("Booking for seat %d has been cancelled.\n", num); 
+} 
+return; 
+} 
+temp = temp->next; 
+} 
+printf("Invalid seat number.\n"); 
+} 
+void displayAllSeats(struct Seat* head) { 
+printf("\nSeat Status:\n"); 
+struct Seat* temp = head; 
+while (temp != NULL) { 
+printf("Seat %d : %s\n", temp->seatNumber, temp->status ? "Booked" : "Free"); 
+temp = temp->next; 
+} 
+} 
+int main() { 
+struct Seat* head = initializeSeats(); 
+int choice, seatNum; 
+printf("===== CINEMAX THEATRE BOOKING SYSTEM =====\n"); 
+displayAllSeats(head); 
+    do { 
+        printf("\n1. Display available seats\n2. Book a seat\n3. Cancel booking\n4. Exit\n"); 
+        printf("Enter your choice: "); 
+        scanf("%d", &choice); 
+ 
+        switch (choice) { 
+            case 1: 
+                displayAvailableSeats(head); 
+                break; 
+            case 2: 
+                printf("Enter seat number to book: "); 
+                scanf("%d", &seatNum); 
+                bookSeat(head, seatNum); 
+                break; 
+            case 3: 
+                printf("Enter seat number to cancel: "); 
+                scanf("%d", &seatNum); 
+                cancelSeat(head, seatNum); 
+                break; 
+            case 4: 
+                printf("Exiting system. Goodbye!\n"); 
+                break; 
+            default: 
+                printf("Invalid choice.\n"); 
+        } 
+    } while (choice != 4); 
+ 
+return 0; 
+}
