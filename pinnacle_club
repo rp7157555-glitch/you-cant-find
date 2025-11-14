@@ -1,0 +1,211 @@
+
+ 
+#include <stdio.h> 
+#include <string.h> 
+#include <stdlib.h> 
+ 
+struct node { 
+    int prn; 
+    char name[50]; 
+    struct node* next; 
+}; 
+ 
+struct node* head = NULL; 
+ 
+// Add President 
+void president() { 
+    struct node* newnode; 
+    newnode = (struct node*)malloc(sizeof(struct node)); 
+ 
+    printf("Enter PRN: "); 
+    scanf("%d", &newnode->prn); 
+    printf("Enter Name: "); 
+    scanf("%s", newnode->name); 
+ 
+    newnode->next = head; 
+    head = newnode; 
+} 
+ 
+// Add Secretary 
+void secretary() { 
+    if (head == NULL) { 
+        printf("Add President first!\n"); 
+        return; 
+    } 
+    struct node* newnode, * temp; 
+    newnode = (struct node*)malloc(sizeof(struct node)); 
+ 
+    printf("Enter PRN: "); 
+    scanf("%d", &newnode->prn); 
+    printf("Enter Name: "); 
+    scanf("%s", newnode->name); 
+    newnode->next = NULL; 
+ 
+    temp = head; 
+    while (temp->next != NULL) { 
+        temp = temp->next; 
+    } 
+    temp->next = newnode; 
+} 
+ 
+// Add Member 
+void member() { 
+    if (head == NULL || head->next == NULL) { 
+        printf("Add President and Secretary first.\n"); 
+        return; 
+    } 
+    struct node* newnode, * temp; 
+    newnode = (struct node*)malloc(sizeof(struct node)); 
+ 
+    printf("Enter the PRN: "); 
+    scanf("%d", &newnode->prn); 
+    printf("Enter the name: "); 
+    scanf("%s", newnode->name); 
+ 
+    temp = head; 
+    while (temp->next->next != NULL) { 
+        temp = temp->next; 
+    } 
+ 
+    newnode->next = temp->next; 
+    temp->next = newnode; 
+} 
+ 
+// Display List 
+void display() { 
+    struct node* temp = head; 
+    if (temp == NULL) { 
+        printf("List is empty.\n"); 
+        return; 
+    } 
+ 
+    while (temp != NULL) { 
+        printf("%d.%s -> ", temp->prn, temp->name); 
+        temp = temp->next; 
+    } 
+    printf("NULL\n"); 
+} 
+ 
+// Total Count 
+int total() { 
+    struct node* temp; 
+    int count = 0; 
+    temp = head; 
+    while (temp != NULL) { 
+        count++; 
+        temp = temp->next; 
+    } 
+    printf("Total Count: %d\n", count); 
+    return count; 
+} 
+ 
+// Delete President 
+void delpre() { 
+    if (head == NULL) { 
+        printf("List is empty.\n"); 
+        return; 
+    } 
+    struct node* temp = head; 
+    head = temp->next; 
+    free(temp); 
+    printf("President deleted successfully.\n"); 
+} 
+ 
+// Delete Secretary 
+void delsec() { 
+    if (head == NULL || head->next == NULL) { 
+        printf("List is too short to delete Secretary.\n"); 
+        return; 
+    } 
+    struct node* temp = head, * prev = NULL; 
+    while (temp->next != NULL) { 
+        prev = temp; 
+        temp = temp->next; 
+    } 
+    prev->next = NULL; 
+    free(temp); 
+    printf("Secretary deleted successfully.\n"); 
+} 
+ 
+// Delete Member 
+void delmem() { 
+    if (head == NULL || head->next == NULL) { 
+        printf("List is empty or only President exists.\n"); 
+        return; 
+    } 
+ 
+    int prn; 
+    printf("Enter the PRN no. to delete: "); 
+    scanf("%d", &prn); 
+ 
+    struct node* temp = head->next; 
+    struct node* prev = head; 
+ 
+    while (temp != NULL && temp->prn != prn) { 
+        prev = temp; 
+        temp = temp->next; 
+    } 
+ 
+    if (temp == NULL || temp->next == NULL) { 
+        printf("Member not found or cannot delete Secretary.\n"); 
+        return; 
+    } 
+ 
+    prev->next = temp->next; 
+    free(temp); 
+    printf("Member deleted successfully.\n"); 
+} 
+ 
+// Main Function 
+int main() { 
+    int choice; 
+    do { 
+        printf("\n 1. Add President" 
+               "\n 2. Add Secretary" 
+               "\n 3. Add Member" 
+               "\n 4. Display" 
+               "\n 5. Total Count" 
+               "\n 6. Delete President" 
+               "\n 7. Delete Secretary" 
+               "\n 8. Delete Member" 
+               "\n 9. Exit"); 
+        printf("\nEnter your choice: "); 
+        scanf("%d", &choice); 
+ 
+        switch (choice) { 
+        case 1: 
+            president(); 
+            break; 
+        case 2: 
+            secretary(); 
+            break; 
+        case 3: 
+            member(); 
+            break; 
+        case 4: 
+            display(); 
+            break; 
+        case 5: 
+            total(); 
+            break; 
+        case 6: 
+            delpre(); 
+            break; 
+        case 7: 
+            delsec(); 
+            break; 
+        case 8: 
+            delmem(); 
+            break; 
+        case 9: 
+            printf("\nThank You.\n"); 
+            break; 
+        default: 
+            printf("Wrong Input.\n"); 
+            break; 
+        } 
+    } while (choice != 9); 
+    return 0; 
+} 
+ 
+ 
