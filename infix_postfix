@@ -1,0 +1,163 @@
+
+ 
+#include<stdio.h> 
+#include<stdlib.h> 
+#include<ctype.h> 
+#include<math.h> 
+#include<string.h> 
+#define size 100 
+ 
+char stack[size]; 
+char infix[size]; 
+char postfix[size]; 
+int top = -1; 
+ 
+void push(char val) 
+{ 
+    if(top==size-1) 
+    { 
+        printf("Stack is full."); 
+    } 
+    else 
+    { 
+        top++; 
+        stack[top]=val; 
+    } 
+} 
+ 
+char pop() 
+{ 
+    if(top==-1) 
+    { 
+        printf("Stack is empty."); 
+        return -1; 
+    } 
+    else 
+    { 
+        return stack[top--]; 
+    } 
+} 
+ 
+int priority(char x) 
+{ 
+    if(x == '(') 
+        return 0; 
+    if(x == '+' || x == '-') 
+        return 1; 
+    if(x == '*' || x == '/') 
+        return 2; 
+    if(x == '^') 
+        return 3; 
+    return -1; 
+} 
+ 
+ 
+int intStack[size]; 
+int intTop = -1; 
+ 
+void intPush(int val) 
+{ 
+    intStack[++intTop] = val; 
+} 
+ 
+int intPop() 
+{ 
+    return intStack[intTop--]; 
+} 
+ 
+int evaluatePostfix(char* postfix) 
+{ 
+    int i = 0; 
+    while (postfix[i] != '\0') 
+    { 
+        char ch = postfix[i]; 
+ 
+        if (isdigit(ch)) 
+        { 
+            int num = 0; 
+            while (isdigit(postfix[i])) 
+            { 
+                num = num * 10 + (postfix[i] - '0'); 
+                i++; 
+            } 
+            intPush(num); 
+        } 
+        else if (ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '^') 
+        { 
+            int b = intPop(); 
+            int a = intPop(); 
+            switch (ch) 
+            { 
+                case '+': intPush(a + b); break; 
+                case '-': intPush(a - b); break; 
+                case '*': intPush(a * b); break; 
+                case '/': intPush(a / b); break; 
+                case '^': intPush(pow(a, b)); break; 
+            } 
+            i++; 
+        } 
+        else 
+        { 
+            i++; 
+        } 
+    } 
+    return intPop(); 
+} 
+ 
+int main() 
+{ 
+    int i=0, j=0; 
+    char val; 
+ 
+    printf("Enter the infix expression : "); 
+    scanf("%s", infix); 
+ 
+    while(infix[i]!='\0') 
+    { 
+        if(isalnum(infix[i])) 
+        { 
+            while (isalnum(infix[i])) 
+            { 
+                postfix[j++] = infix[i]; 
+                i++; 
+            } 
+            postfix[j++] = ','; 
+            i--; 
+        } 
+        else if(infix[i]=='(') 
+        { 
+            push(infix[i]); 
+        } 
+        else if(infix[i]==')') 
+        { 
+            while((val=pop())!='(') 
+            { 
+                postfix[j++] = val; 
+            } 
+        } 
+        else 
+        { 
+            while(top!= -1 && priority(stack[top])>=priority(infix[i])) 
+            { 
+                postfix[j++] = pop(); 
+            } 
+            push(infix[i]); 
+        } 
+        i++; 
+    } 
+ 
+    while(top!=-1) 
+    { 
+        postfix[j++] = pop(); 
+    } 
+    postfix[j] = '\0'; 
+ 
+    printf("Postfix Expression: %s\n", postfix); 
+ 
+    int result = evaluatePostfix(postfix); 
+    printf("Result = %d\n", result); 
+ 
+    return 0; 
+} 
+ 
+ 
